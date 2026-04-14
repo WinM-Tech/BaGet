@@ -1,0 +1,47 @@
+version: "3.8"
+
+# WinM Nuget - Docker Compose 部署配置
+# 使用方式：docker compose up -d
+# 访问地址：http://localhost:5000
+
+services:
+  winm-nuget:
+    # 从 GitHub Container Registry 拉取镜像
+    # 如需本地构建，注释掉 image，取消注释 build 部分
+    image: ghcr.io/winm-tech/baget:latest
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    container_name: winm-nuget
+    restart: unless-stopped
+    ports:
+      - "5000:80"
+    environment:
+      # 发布包所需的 API 密钥（请修改为安全的密钥）
+      ApiKey: "CHANGE-ME-SECRET-KEY"
+      # 存储配置：使用文件系统存储包文件
+      Storage__Type: FileSystem
+      Storage__Path: /var/baget/packages
+      # 数据库配置：使用 SQLite
+      Database__Type: Sqlite
+      Database__ConnectionString: "Data Source=/var/baget/baget.db"
+      # 搜索配置
+      Search__Type: Database
+      # 是否允许覆盖已有版本（默认禁止）
+      AllowPackageOverwrites: "false"
+      # 删除行为：Unlist（下架）或 HardDelete（物理删除）
+      PackageDeletionBehavior: Unlist
+    volumes:
+      # 持久化数据：包文件 + SQLite 数据库
+      - baget-data:/var/baget
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/v3/index.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  # 命名卷：Docker 管理数据持久化
+  baget-data:
+    driver: local
