@@ -1,48 +1,48 @@
-# Run BaGet on your Computer
+# 在本地计算机上运行 BaGet
 
-## Run BaGet
+## 运行步骤
 
-1. Install the [.NET Core SDK](https://www.microsoft.com/net/download)
-1. Download and extract [BaGet's latest release](https://github.com/loic-sharma/BaGet/releases)
-1. Start the service with `dotnet BaGet.dll`
-1. Browse `http://localhost:5000/` in your browser
+1. 安装 [.NET Core SDK](https://www.microsoft.com/zh-cn/dotnet/download)
+2. 下载并解压 [BaGet 最新发行版](https://github.com/WinM-Tech/BaGet/releases)
+3. 执行 `dotnet BaGet.dll` 启动服务
+4. 在浏览器中访问 `http://localhost:5000/`
 
-## Configure BaGet
+## 配置 BaGet
 
-You can modify BaGet's configurations by editing the `appsettings.json` file. For the full list of configurations, please refer to [BaGet's configuration](../configuration.md) guide.
+通过编辑 `appsettings.json` 文件修改 BaGet 配置。完整配置项请参阅 [BaGet 配置指南](../configuration.md)。
 
-## Publish packages
+## 发布包
 
-Publish your first package with:
+使用以下命令发布您的第一个包：
 
 ```
 dotnet nuget push -s http://localhost:5000/v3/index.json package.1.0.0.nupkg
 ```
 
-Publish your first [symbol package](https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg) with:
+发布第一个[符号包](https://docs.microsoft.com/zh-cn/nuget/create-packages/symbol-packages-snupkg)：
 
 ```
 dotnet nuget push -s http://localhost:5000/v3/index.json symbol.package.1.0.0.snupkg
 ```
 
 !!! warning
-    You should secure your server by requiring an API Key to publish packages. For more information, please refer to the [Require an API Key](../configuration.md#require-an-api-key) guide.
+    建议通过设置 API 密钥来保护您的服务器，防止未授权发布。详见[设置 API 密钥](../configuration.md#设置-api-密钥)。
 
-## Restore packages
+## 还原包
 
-You can restore packages by using the following package source:
+使用以下包源地址还原包：
 
 `http://localhost:5000/v3/index.json`
 
-Some helpful guides:
+相关配置指南：
 
-* [Visual Studio](https://docs.microsoft.com/en-us/nuget/consume-packages/install-use-packages-visual-studio#package-sources)
-* [NuGet.config](https://docs.microsoft.com/en-us/nuget/reference/nuget-config-file#package-source-sections)
+* [Visual Studio 配置](https://docs.microsoft.com/zh-cn/nuget/consume-packages/install-use-packages-visual-studio#package-sources)
+* [NuGet.config 配置](https://docs.microsoft.com/zh-cn/nuget/reference/nuget-config-file#package-source-sections)
 
-## Symbol server
+## 符号服务器
 
-You can load symbols by using the following symbol location:
+使用以下地址加载调试符号：
 
 `http://localhost:5000/api/download/symbols`
 
-For Visual Studio, please refer to the [Configure Debugging](https://docs.microsoft.com/en-us/visualstudio/debugger/specify-symbol-dot-pdb-and-source-files-in-the-visual-studio-debugger?view=vs-2017#configure-symbol-locations-and-loading-options) guide.
+Visual Studio 调试符号配置请参阅[配置调试符号位置](https://docs.microsoft.com/zh-cn/visualstudio/debugger/specify-symbol-dot-pdb-and-source-files-in-the-visual-studio-debugger?view=vs-2017#configure-symbol-locations-and-loading-options)。

@@ -1,16 +1,15 @@
-# Local Feeds
+# 本地 Feed
 
 !!! warning
-    This page is a work in progress!
+    本页内容正在建设中！
 
-[Local feeds](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds), also known as "folder feeds", let you
-use a folder as a NuGet package source. You can access these packages using a network share.
+[本地 Feed](https://docs.microsoft.com/zh-cn/nuget/hosting-packages/local-feeds)，也称为“文件夹 Feed”，允许您将本地文件夹用作 NuGet 包来源，也可通过网络共享访问这些包。
 
-# BaGet vs local feeds
+# BaGet vs 本地 Feed
 
-Local feeds are very simple and are lack features like:
+本地 Feed 非常简单，但缺少以下功能：
 
-1. Search functionality
-1. A user interface to browse your packages
-1. Authentication for package uploads
-1. Cloud storage for large feeds
+1. 搜索功能
+1. 可视化浏览界面
+1. 上传验权
+1. 大型 Feed 的云存储支持

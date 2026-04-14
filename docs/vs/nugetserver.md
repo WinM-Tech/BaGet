@@ -1,21 +1,21 @@
 # NuGet.Server
 
 !!! warning
-    This page is a work in progress!
+    本页内容正在建设中！
 
-[NuGet.Server](https://github.com/NuGet/NuGet.Server) is a lightweight standalone NuGet server. It is strongly recommended that you upgrade to BaGet if you use NuGet.Server. Feel free to open [GitHub issues](https://github.com/loic-sharma/BaGet/issues) if you need help migrating.
+[NuGet.Server](https://github.com/NuGet/NuGet.Server) 是一个轻量级的独立 NuGet 服务器。如果您目前使用 NuGet.Server，建议升级到 BaGet。如需迁移帮助，请在 [GitHub](https://github.com/WinM-Tech/BaGet/issues) 提交 Issue。
 
 * NuGet.Server
-    * Only runs on Windows
-    * Supports NuGet v2 APIs (missing verified packages, signed packages, etc...)
-    * Doesn't support NuGet's v3 APIs
-    * Does not scale well
-    * Not well documented
-    * Not well maintained
+    * 仅支持 Windows
+    * 支持 NuGet v2 API（缺少已验证包、签名包等功能）
+    * 不支持 NuGet v3 API
+    * 扩展性差
+    * 文档不完善
+    * 维护不活跃
 * BaGet
-    * Cross-platform
-    * Supports NuGet v3 APIs
+    * 跨平台
+    * 支持 NuGet v3 API
 
-## Migration Guide
+## 迁移指南
 
-You can use the [NuGet.Server migration](../import/nugetserver.md) guide to import your NuGet.Server packages into BaGet.
+您可以使用 [NuGet.Server 迁移指南](../import/nugetserver.md) 将包导入到 BaGet。

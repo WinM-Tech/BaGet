@@ -1,14 +1,14 @@
-# Use Alibaba (Aliyun) Object Storage Service
+# 使用阿里云对象存储服务（OSS）
 
-You can store packages to [Alibaba(Aliyun) OSS](https://www.alibabacloud.com/product/oss).
+您可以将包存储到[阿里云 OSS](https://www.aliyun.com/product/oss)。
 
-## Configure BaGet
+## 配置 BaGet
 
-You can modify BaGet's configurations by editing the `appsettings.json` file. For the full list of configurations, please refer to [BaGet's configuration](../configuration.md) guide.
+通过编辑 `appsettings.json` 文件修改 BaGet 配置。完整配置项请参阅 [BaGet 配置指南](../configuration.md)。
 
-### Aliyun OSS Storage
+### 阿里云 OSS 存储
 
-Update the `appsettings.json` file:
+修改 `appsettings.json` 文件：
 
 ```json
 {
@@ -16,11 +16,11 @@ Update the `appsettings.json` file:
 
     "Storage": {
         "Type": "AliyunOss",
-        "Endpoint": "oss-us-west-1.aliyuncs.com",
-        "Bucket": "foo",
+        "Endpoint": "oss-cn-hangzhou.aliyuncs.com",
+        "Bucket": "my-bucket",
         "AccessKey": "",
         "AccessKeySecret": "",
-        "Prefix": "lib/baget" // optional
+        "Prefix": "lib/baget" // 可选
     },
 
     ...

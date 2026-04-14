@@ -1,30 +1,30 @@
-# Import NuGet.Server packages
+# 从 NuGet.Server 迁移
 
-[NuGet.Server](https://github.com/NuGet/NuGet.Server) is a lightweight standalone NuGet server. It is strongly recommended that you upgrade to BaGet if you use NuGet.Server. Feel free to open a [GitHub issue](https://github.com/loic-sharma/BaGet/issues) if you need help migrating.
+[NuGet.Server](https://github.com/NuGet/NuGet.Server) 是一个轻量级的独立 NuGet 服务器。如果您目前使用 NuGet.Server，建议升级到 BaGet。如需迁移帮助，请在 [GitHub](https://github.com/WinM-Tech/BaGet/issues) 提交 Issue。
 
 !!! info
-    Please refer to the [BaGet vs NuGet.Server](../vs/nugetserver.md) page for reasons to upgrade to BaGet.
+    请参阅 [BaGet vs NuGet.Server](../vs/nugetserver.md) 页面了解升级到 BaGet 的理由。
 
-## Steps
+## 迁移步骤
 
-Make sure that you've installed [nuget.exe](https://www.nuget.org/downloads). In PowerShell, run:
+确保已安装 [nuget.exe](https://www.nuget.org/downloads)。在 PowerShell 中执行：
 
 ```ps1
-$source = "<NuGet.Server package source>"
-$destination = "<BaGet package source>"
+$source = "<NuGet.Server 包来源地址>"
+$destination = "<BaGet 包来源地址>"
 ```
 
-If you've [configured BaGet to require an API Key](https://loic-sharma.github.io/BaGet/configuration/#requiring-an-api-key), set it using [the `setapikey` command](https://docs.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-setapikey):
+如果已[配置 BaGet 需要 API 密钒](https://loic-sharma.github.io/BaGet/configuration/#requiring-an-api-key)，请设置 API 密钒：
 
 ```ps1
 & nuget.exe setapikey "MY-API-KEY" -Source $destination
 ```
 
-Now run the following PowerShell script:
+执行以下 PowerShell 脚本进行包迁移：
 
 ```ps1
 if (!(Test-Path "Web.config")) {
-  throw "Please run this script in the same directory as NuGet.Server's Web.config file"
+  throw "请在 NuGet.Server 的 Web.config 文件相同目录下执行此脚本"
 }
 
 (& nuget.exe list -AllVersions -Source $source).Split([Environment]::NewLine) | % {

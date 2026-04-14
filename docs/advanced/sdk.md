@@ -1,18 +1,18 @@
 # BaGet SDK
 
-You can use BaGet's [`BaGet.Protocol`](https://www.nuget.org/packages/BaGet.Protocol) package to interact with a NuGet server.
+您可以使用 BaGet 的 [`BaGet.Protocol`](https://www.nuget.org/packages/BaGet.Protocol) 包与 NuGet 服务器进行交互。
 
-## Getting Started
+## 快速开始
 
-Install the [`BaGet.Protocol`](https://www.nuget.org/packages/BaGet.Protocol) package:
+安装 [`BaGet.Protocol`](https://www.nuget.org/packages/BaGet.Protocol) 包：
 
 ```
 dotnet add package BaGet.Protocol
 ```
 
-## List Package Versions
+## 列出包的所有版本
 
-Find all versions of the `Newtonsoft.Json` package:
+查找 `Newtonsoft.Json` 包的所有版本：
 
 ```csharp
 NuGetClient client = new NuGetClient("https://api.nuget.org/v3/index.json");
@@ -21,11 +21,11 @@ IReadOnlyList<NuGetVersion>> versions = await client.ListPackageVersionsAsync("N
 
 foreach (NuGetVersion version in versions)
 {
-    Console.WriteLine($"Found version: {version}");
+    Console.WriteLine($"找到版本：{version}");
 }
 ```
 
-## Download a package
+## 下载包
 
 ```csharp
 NuGetClient client = new NuGetClient("https://api.nuget.org/v3/index.json");
@@ -35,45 +35,45 @@ NuGetVersion packageVersion = new NuGetVersion("12.0.1");
 
 using (Stream packageStream = await client.DownloadPackageAsync(packageId, packageVersion))
 {
-    Console.WriteLine($"Downloaded package {packageId} {packageVersion}");
+    Console.WriteLine($"已下载包 {packageId} {packageVersion}");
 }
 ```
 
-## Find Package Metadata
+## 获取包的元数据
 
 ```csharp
 NuGetClient client = new NuGetClient("https://api.nuget.org/v3/index.json");
 
-// Find the metadata for all versions of a package.
+// 获取某个包所有版本的元数据
 IReadOnlyList<PackageMetadata> items = await client.GetPackageMetadataAsync("Newtonsoft.Json");
 if (!items.Any())
 {
-    Console.WriteLine($"Package 'Newtonsoft.Json' does not exist");
+    Console.WriteLine("包 'Newtonsoft.Json' 不存在");
     return;
 }
 
 foreach (var metadata in items)
 {
-    Console.WriteLine($"Version: {metadata.Version}");
-    Console.WriteLine($"Listed: {metadata.Listed}");
-    Console.WriteLine($"Tags: {metadata.Tags}");
-    Console.WriteLine($"Description: {metadata.Description}");
+    Console.WriteLine($"版本：{metadata.Version}");
+    Console.WriteLine($"已上架：{metadata.Listed}");
+    Console.WriteLine($"标签：{metadata.Tags}");
+    Console.WriteLine($"描述：{metadata.Description}");
 }
 
-// Or, find the metadata for a single version of a package.
+// 或者获取某个特定版本的元数据
 string packageId = "Newtonsoft.Json"
 NuGetVersion packageVersion = new NuGetVersion("12.0.1");
 
 PackageMetadata metadata = await client.GetPackageMetadataAsync(packageId, packageVersion);
 
-Console.WriteLine($"Listed: {metadata.Listed}");
-Console.WriteLine($"Tags: {metadata.Tags}");
-Console.WriteLine($"Description: {metadata.Description}");
+Console.WriteLine($"已上架：{metadata.Listed}");
+Console.WriteLine($"标签：{metadata.Tags}");
+Console.WriteLine($"描述：{metadata.Description}");
 ```
 
-## Search for packages
+## 搜索包
 
-Search for "json" packages:
+搜索包含 "json" 关键字的包：
 
 ```csharp
 NuGetClient client = new NuGetClient("https://api.nuget.org/v3/index.json");
@@ -81,6 +81,6 @@ IReadOnlyList<SearchResult> results = await client.SearchAsync("json");
 
 foreach (SearchResult result in results)
 {
-    Console.WriteLine($"Found package {result.PackageId} {searchResult.Version}");
+    Console.WriteLine($"找到包 {result.PackageId} {searchResult.Version}");
 }
 ```

@@ -1,4 +1,4 @@
 # MyGet
 
 !!! warning
-    This page is a work in progress!
+    本页内容正在建设中！

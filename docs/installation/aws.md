@@ -1,17 +1,17 @@
-# Run BaGet on AWS
+# 在 AWS 上运行 BaGet
 
 !!! warning
-    This page is a work in progress!
+    本页内容正在建设中！
 
-Use Amazon Web Services to scale BaGet. You can store metadata on [Amazon RDS](https://aws.amazon.com/rds/postgresql/) and upload packages to [Amazon S3](https://aws.amazon.com/s3/).
+利用 Amazon Web Services 扩展 BaGet。可将元数据存储到 [Amazon RDS](https://aws.amazon.com/rds/postgresql/)，将包文件上传到 [Amazon S3](https://aws.amazon.com/s3/)。
 
-## Configure BaGet
+## 配置 BaGet
 
-You can modify BaGet's configurations by editing the `appsettings.json` file. For the full list of configurations, please refer to [BaGet's configuration](../configuration.md) guide.
+通过编辑 `appsettings.json` 文件修改 BaGet 配置。完整配置项请参阅 [BaGet 配置指南](../configuration.md)。
 
 ### Amazon S3
 
-Update the `appsettings.json` file:
+修改 `appsettings.json` 文件：
 
 ```json
 {
@@ -31,7 +31,7 @@ Update the `appsettings.json` file:
 
 ### Amazon RDS
 
-To use PostgreSQL, update the `appsettings.json` file:
+使用 PostgreSQL，修改 `appsettings.json`：
 
 ```json
 {
@@ -46,7 +46,7 @@ To use PostgreSQL, update the `appsettings.json` file:
 }
 ```
 
-To use MySQL, update the `appsettings.json` file:
+使用 MySQL，修改 `appsettings.json`：
 
 ```json
 {
@@ -61,22 +61,22 @@ To use MySQL, update the `appsettings.json` file:
 }
 ```
 
-## Publish packages
+## 发布包
 
-Publish your first package with:
+使用以下命令发布您的第一个包：
 
 ```
 dotnet nuget push -s http://localhost:5000/v3/index.json package.1.0.0.nupkg
 ```
 
-Publish your first [symbol package](https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg) with:
+发布[符号包](https://docs.microsoft.com/zh-cn/nuget/create-packages/symbol-packages-snupkg)：
 
 ```
 dotnet nuget push -s http://localhost:5000/v3/index.json symbol.package.1.0.0.snupkg
 ```
 
 !!! warning
-    You should secure your server by requiring an API Key to publish packages. For more information, please refer to the [Require an API Key](../configuration.md#require-an-api-key) guide.
+    建议通过设置 API 密钒保护服务器安全。详见[设置 API 密钒](../configuration.md#设置-api-密钒)。
 
 ## Restore packages
 

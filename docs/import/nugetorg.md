@@ -1,30 +1,27 @@
-# Import nuget.org packages
+# 导入 nuget.org 包
 
 !!! warning
-    This page is a work in progress!
+    本页内容正在建设中！
 
-## Mirroring
+## 镜像模式
 
-You can configure BaGet to mirror nuget.org. For example, say you install BaGet, enable mirroring, and try to install the package
-[`Newtonsoft.Json`](https://www.nuget.org/packages/Newtonsoft.Json/). BaGet doesn't have this package yet, so it will
-automatically index this package from nuget.org. This is also known as "read-through caching".
+您可以配置 BaGet 妆成 nuget.org 的镜像。例如，当您安装 BaGet 并启用镜像后，如果尝试安装
+[`Newtonsoft.Json`](https://www.nuget.org/packages/Newtonsoft.Json/) 包，而 BaGet 本地尚没有该包，它会自动从 nuget.org 索引这个包。这也直接被称为“透传缓存”。
 
-For more information, please see [Enable read-through caching](../configuration#enable-read-through-caching).
+更多信息请参阅[启用透传缓存](../configuration#启用透传缓存)。
 
-## Importing package downloads from nuget.org
+## 从 nuget.org 导入包下载量
 
-You can import package downloads from nuget.org:
-
-1. Navigate to `.\BaGet\src\BaGet`
-2. Run:
+1. 进入 `.\BaGet\src\BaGet` 目录
+2. 执行：
 
 ```
 dotnet run -- import-downloads
 ```
 
-## Importing all nuget.org packages
+## 导入全部 nuget.org 包
 
-* TODO Check-in code
-* Explain scaling
-* Rebuild indexes at end
-* Importing downloads from nuget.org
+* TODO: 提交代码
+* 说明扩展方案
+* 最后重建索引
+* 导入 nuget.org 下载量

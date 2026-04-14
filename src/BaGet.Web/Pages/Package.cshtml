@@ -7,62 +7,76 @@
         : Model.Package.Id;
 }
 
+@* 包未找到提示 *@
 @if (!Model.Found)
 {
-    <div>
-        <h2>Oops, package not found...</h2>
-        <p>Could not find package '@Model.Package.Id'.</p>
-        <p>You can try searching on <a href="https://www.nuget.org/packages?q=@Uri.EscapeDataString(Model.Package.Id)" target="_blank" rel="noopener noreferrer">nuget.org</a> package.</p>
-        <p>Think there's a problem? Consider taking a look at our <a href="https://loic-sharma.github.io/BaGet/" target="_blank" rel="noopener noreferrer">documentation</a> or asking for help on our <a href="https://github.com/loic-sharma/BaGet/issues" target="_blank" rel="noopener noreferrer">GitHub project</a></p>
+    <div class="empty-state">
+        <span class="empty-icon ms-Icon ms-Icon--PackageError" aria-hidden="true"></span>
+        <h2>未找到该包</h2>
+        <p>找不到包 "<strong>@Model.Package.Id</strong>"。</p>
+        <p>
+            可以在
+            <a href="https://www.nuget.org/packages?q=@Uri.EscapeDataString(Model.Package.Id)" target="_blank" rel="noopener noreferrer">nuget.org</a>
+            上搜索此包。
+        </p>
+        <p>
+            遇到问题？请查阅
+            <a href="https://loic-sharma.github.io/BaGet/" target="_blank" rel="noopener noreferrer">文档</a>
+            或在
+            <a href="https://github.com/WinM-Tech/BaGet/issues" target="_blank" rel="noopener noreferrer">GitHub</a>
+            上提交反馈。
+        </p>
     </div>
 }
 else
 {
-    <div class="row display-package">
-        <aside class="col-sm-1 package-icon">
+    <div class="display-package">
+        @* 包图标 *@
+        <aside class="package-icon-aside hidden-xs hidden-sm">
             <img src="@(Model.IconUrl ?? Url.Content("~/_content/BaGet.Web/images/default-package-icon-256x256.png"))"
                  class="img-responsive"
                  onerror="this.src='@Url.Content("~/_content/BaGet.Web/images/default-package-icon-256x256.png")'"
-                 alt="The package icon" />
+                 alt="包图标" />
         </aside>
 
-        <article class="col-sm-8 package-details-main">
+        @* 包主要内容 *@
+        <article class="package-details-main">
+            @* 包标题和版本 *@
             <div class="package-title">
-                <h1>
-                    @Model.Package.Id
-
-                    <small class="text-nowrap">@Model.Package.NormalizedVersionString</small>
-                </h1>
+                <h1>@Model.Package.Id</h1>
+                <small class="text-nowrap">@Model.Package.NormalizedVersionString</small>
             </div>
 
+            @* 安装命令选项卡 *@
             <div class="tabbed-info" x-data="{ tabs: tabs, active: tabs[0] }">
-                <ul class="nav">
+                <ul>
                     <template x-for="tab in tabs" :key="tab.name">
                         <li x-bind:class="{ active: tab.name === active.name }">
-                            <a href="#" x-text="tab.name" @@click="active = tab"></a>
+                            <a href="#" x-text="tab.name" @@click.prevent="active = tab"></a>
                         </li>
                     </template>
                 </ul>
 
                 <div class="content">
                     <div class="script" x-text="`${active.prefix} ${active.content}`"></div>
-
                     <div class="copy-button">
-                        <button class="btn btn-default btn-warning"
+                        <button class="btn btn-warning"
                                 type="button"
-                                data-tottle="popover"
+                                data-toggle="popover"
                                 data-placement="bottom"
-                                data-content="Copied"
-                                @@click="window.baget.copyTextToClipboard(active.content.join('\n'), $el)">
+                                data-content="已复制"
+                                @@click="window.baget.copyTextToClipboard(active.content.join('\n'), $el)"
+                                title="复制到剪贴板">
                             <i class="ms-Icon ms-Icon--Copy"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
+            @* 自述文件 *@
             @{
                 ExpandableSection(
-                    "Readme",
+                    "自述文件",
                     expanded: false,
                     @<div>
                         @if (Model.Readme == null)
@@ -76,23 +90,24 @@ else
                     </div>);
             }
 
+            @* 被依赖情况 *@
             @if (!Model.IsDotnetTemplate && !Model.IsDotnetTool)
             {
-                ExpandableSection("Used By", expanded: false,
+                ExpandableSection("被依赖情况", expanded: false,
                     @<div class="package-used-by">
                         @if (!Model.UsedBy.Any())
                         {
-                            <p>No packages depend on @Model.Package.Id.</p>
+                            <p>暂无其他包依赖 <strong>@Model.Package.Id</strong>。</p>
                         }
                         else
                         {
-                            <p>Showing the top 20 packages that depend on @Model.Package.Id.</p>
+                            <p>以下是依赖 <strong>@Model.Package.Id</strong> 的前 20 个包。</p>
                             <div>
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th class="col-sm-10">Packages</th>
-                                            <th class="col-sm-2">Downloads</th>
+                                            <th class="col-sm-10">包名称</th>
+                                            <th class="col-sm-2">下载量</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -116,19 +131,21 @@ else
                     </div>);
             }
 
+            @* 发行说明 *@
             @if (!string.IsNullOrEmpty(Model.Package.ReleaseNotes))
             {
-                ExpandableSection("Release Notes", expanded: false,
+                ExpandableSection("发行说明", expanded: false,
                     @<div class="package-release-notes">@Model.Package.ReleaseNotes</div>);
             }
 
+            @* 依赖项 *@
             @{ ExpandableSection(
-                "Dependencies",
+                "依赖项",
                 expanded: false,
                 @<div class="dependency-groups">
                     @if (!Model.DependencyGroups.Any())
                     {
-                        @:This package has no dependencies.
+                        @:此包没有任何依赖项。
                     }
                     else
                     {
@@ -141,7 +158,7 @@ else
                             <ul class="list-unstyled dependency-group">
                                 @if (!group.Dependencies.Any())
                                 {
-                                    <li>No dependencies.</li>
+                                    <li>无依赖项。</li>
                                 }
                                 else
                                 {
@@ -153,7 +170,6 @@ else
                                                asp-route-version="@null">
                                                 @dependency.PackageId
                                             </a>
-
                                             <span> @dependency.VersionSpec</span>
                                         </li>
                                     }
@@ -164,14 +180,15 @@ else
                 </div>);
             }
 
-            @{ ExpandableSection("Versions", expanded: true,
+            @* 版本列表 *@
+            @{ ExpandableSection("版本历史", expanded: true,
                 @<div class="version-list" x-data="{ showAll: false }">
                     <table class="table borderless">
                         <thead>
                             <tr>
-                                <th>Version</th>
-                                <th>Downloads</th>
-                                <th>Last updated</th>
+                                <th>版本号</th>
+                                <th>下载量</th>
+                                <th>更新时间</th>
                             </tr>
                         </thead>
                         <tbody class="no-border">
@@ -193,37 +210,37 @@ else
                     {
                         <button type="button" class="link-button" @@click="showAll = !showAll">
                             <i class="ms-Icon" x-bind:class="{ 'ms-Icon--CalculatorAddition': !showAll, 'ms-Icon--CalculatorSubtract': showAll }"></i>
-                            <span x-text="showAll ? 'Show less' : 'Show more'"></span>
+                            <span x-text="showAll ? '收起' : '显示全部'"></span>
                         </button>
                     }
-
                 </div>);
             }
         </article>
 
-        <aside class="col-sm-3 package-details-info">
-            <div>
-                <h2>Info</h2>
-
+        @* 包信息侧边栏 *@
+        <aside class="package-details-info">
+            @* 基本信息卡片 *@
+            <div class="info-card">
+                <h2>基本信息</h2>
                 <ul class="list-unstyled ms-Icon-ul">
                     <li>
                         <i class="ms-Icon ms-Icon--History" aria-hidden="true"></i>
-                        Last updated @Model.LastUpdated.Humanize()
+                        @Model.LastUpdated.Humanize() 更新
                     </li>
 
                     @if (Model.Package.ProjectUrlString != null)
                     {
                         <li>
                             <i class="ms-Icon ms-Icon--Globe"></i>
-                            <a href="@Model.Package.ProjectUrlString">Project URL</a>
+                            <a href="@Model.Package.ProjectUrlString" target="_blank" rel="noopener noreferrer">项目主页</a>
                         </li>
                     }
 
                     @if (Model.Package.RepositoryUrlString != null)
                     {
                         <li>
-                            <img class="icon" aria-hidden="true" alt="GitHub logo" src="@Url.Content("~/_content/BaGet.Web/images/github-32x32.png")" />
-                            <a href="@Model.Package.RepositoryUrlString">Source code</a>
+                            <img class="icon" aria-hidden="true" alt="GitHub" src="@Url.Content("~/_content/BaGet.Web/images/github-32x32.png")" />
+                            <a href="@Model.Package.RepositoryUrlString" target="_blank" rel="noopener noreferrer">源代码</a>
                         </li>
                     }
 
@@ -231,45 +248,45 @@ else
                     {
                         <li>
                             <i class="ms-Icon ms-Icon--Certificate"></i>
-                            <a href="@Model.LicenseUrl">License</a>
+                            <a href="@Model.LicenseUrl" target="_blank" rel="noopener noreferrer">许可证</a>
                         </li>
                     }
 
                     <li>
                         <i class="ms-Icon ms-Icon--CloudDownload"></i>
-                        <a href="@Model.PackageDownloadUrl">Download package</a>
+                        <a href="@Model.PackageDownloadUrl">下载包</a>
                     </li>
                 </ul>
             </div>
 
-            <div>
-                <h2>Statistics</h2>
-
+            @* 统计数据卡片 *@
+            <div class="info-card">
+                <h2>下载统计</h2>
                 <ul class="list-unstyled ms-Icon-ul">
                     <li>
                         <i class="ms-Icon ms-Icon--Download"></i>
-                        @Model.TotalDownloads.ToString("N0") total downloads
+                        总下载量：@Model.TotalDownloads.ToString("N0")
                     </li>
-
                     <li>
                         <i class="ms-Icon ms-Icon--Giftbox"></i>
-                        @Model.Package.Downloads.ToString("N0") downloads of current version
+                        当前版本：@Model.Package.Downloads.ToString("N0")
                     </li>
                 </ul>
             </div>
 
+            @* 作者信息卡片 *@
             @if (Model.Package.Authors.Any())
             {
-                <div>
-                    <h2>Authors</h2>
-
-                    <p>@string.Join(", ", Model.Package.Authors)</p>
+                <div class="info-card">
+                    <h2>作者</h2>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">@string.Join("、", Model.Package.Authors)</p>
                 </div>
             }
         </aside>
     </div>
 }
 
+@* 安装命令 JS 数据 *@
 @if (Model.Found)
 {
     <script type="text/javascript">
@@ -325,13 +342,16 @@ else
 
 @functions {
 
+    // 默认显示的版本数量
     private const int DefaultVisibleVersions = 5;
 
+    // 渲染可展开区段（标题 + 内容）
     private void ExpandableSection(string title, bool expanded, Func<object, IHtmlContent> template)
     {
         <div class="expandable-section" x-data="{ expanded: @Json.Serialize(expanded) }">
             <h2>
-                <button type="button" class="link-button" @@click="expanded = !expanded">
+                <button type="button" class="link-button" @@click="expanded = !expanded"
+                        style="width:100%;text-align:left;padding:12px 16px;font-size:0.95rem;font-weight:600;">
                     <i x-bind:class="{ 'ms-Icon--ChevronDown': expanded, 'ms-Icon--ChevronRight': !expanded }"
                        class="ms-Icon">
                     </i>

@@ -3,14 +3,13 @@
 @model IndexModel
 
 @{
-    ViewData["Title"] = "Packages";
+    ViewData["Title"] = "包列表";
     ViewData["SearchQuery"] = Model.Query;
 }
 
+@* 把搜索过滤参数传递给 header 中的搜索表单 *@
 @section SearchForm
 {
-    @* The search query is in a form in the header. The search filters are bindings on this Razor page.
-    @* Pass the Razor bindings back up to the header's search form. *@
     @if (Model.PackageType != "any")
     {
         <input type="hidden" name="packageType" value="@Model.PackageType" />
@@ -27,14 +26,16 @@
     }
 }
 
-<div class="search-options form-inline">
+@* 过滤选项栏 *@
+<div class="search-options">
+    @* 包类型过滤 *@
     <div class="form-group">
-        <label>Package type:</label>
-
+        <label>包类型：</label>
         <div class="search-dropdown">
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="package-type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    @PackageTypes.GetValueOrDefault(Model.PackageType, "Other")
+                <button class="btn btn-default dropdown-toggle" type="button" id="package-type"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    @PackageTypes.GetValueOrDefault(Model.PackageType, "其他")
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="package-type">
@@ -47,13 +48,14 @@
         </div>
     </div>
 
+    @* 目标框架过滤 *@
     <div class="form-group">
-        <label>Framework:</label>
-
+        <label>目标框架：</label>
         <div class="search-dropdown">
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="framework" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    @TargetFrameworks.GetValueOrDefault(Model.Framework, "Other")
+                <button class="btn btn-default dropdown-toggle" type="button" id="framework"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    @TargetFrameworks.GetValueOrDefault(Model.Framework, "其他")
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="framework">
@@ -77,41 +79,45 @@
         </div>
     </div>
 
+    @* 预发布版本选项 *@
     <div class="form-group form-check">
-        <label for="prerelease">Include prerelease:</label>
-
-        <input
-            type="checkbox"
-            id="prerelease"
-            @(Model.Prerelease ? "checked='checked'" : "")
-            onclick="window.location.href='@SearchLink(prerelease: !Model.Prerelease, page: 1)'" />
+        <label for="prerelease">包含预发布版本</label>
+        <input type="checkbox"
+               id="prerelease"
+               @(Model.Prerelease ? "checked='checked'" : "")
+               onclick="window.location.href='@SearchLink(prerelease: !Model.Prerelease, page: 1)'" />
     </div>
 </div>
 
+@* 搜索结果为空时的提示 *@
 @if (Model.Packages.Count == 0)
 {
-    <div>
-        <h2>Oops, nothing here...</h2>
-        <p>
-            It looks like there's no package here to see. Take a look below for useful links.
-        </p>
-        <p><a asp-page="/Upload">Upload a package</a></p>
-        <p><a href="https://loic-sharma.github.io/BaGet/" target="_blank" rel="noopener noreferrer">BaGet documentation</a></p>
-        <p><a href="https://github.com/loic-sharma/BaGet/issues" target="_blank" rel="noopener noreferrer">BaGet issues</a></p>
+    <div class="empty-state">
+        <span class="empty-icon ms-Icon ms-Icon--Package" aria-hidden="true"></span>
+        <h2>暂无结果</h2>
+        <p>没有找到符合条件的包，请尝试其他关键词。</p>
+        <p><a asp-page="/Upload">上传第一个包</a></p>
+        <p><a href="https://loic-sharma.github.io/BaGet/" target="_blank" rel="noopener noreferrer">查看文档</a></p>
+        <p><a href="https://github.com/WinM-Tech/BaGet/issues" target="_blank" rel="noopener noreferrer">反馈问题</a></p>
     </div>
 }
 else
 {
+    bool showPreviousLink = Model.PageIndex > 1;
+    bool showNextLink = Model.Packages.Count >= IndexModel.ResultsPerPage;
+    @* 包列表 *@
     @foreach (var package in Model.Packages)
     {
-        <div class="row search-result">
-            <div class="col-sm-1 hidden-xs hidden-sm">
+        <div class="search-result">
+            @* 包图标 *@
+            <div class="package-icon-col hidden-xs hidden-sm">
                 <img src="@package.IconUrl"
                      class="package-icon img-responsive"
                      onerror="this.src='@Url.Content("~/_content/BaGet.Web/images/default-package-icon-256x256.png")'"
-                     alt="The package icon" />
+                     alt="包图标" />
             </div>
-            <div class="col-sm-11">
+            @* 包内容 *@
+            <div class="package-content">
                 <div>
                     <a asp-page="Package"
                        asp-route-id="@package.PackageId"
@@ -119,53 +125,62 @@ else
                        class="package-title">
                         @package.PackageId
                     </a>
-                    <span>by: @string.Join(" ", package.Authors)</span>
+                    <span class="package-author">作者：@string.Join("、", package.Authors)</span>
                 </div>
+                @* 包元数据 *@
                 <ul class="info">
                     <li>
                         <span>
                             <i class="ms-Icon ms-Icon--Download"></i>
-                            @package.TotalDownloads.ToMetric() total downloads
+                            @package.TotalDownloads.ToMetric() 次下载
                         </span>
                     </li>
                     <li>
                         <span>
                             <i class="ms-Icon ms-Icon--Flag"></i>
-                            Latest version: @package.Version
+                            最新版本：@package.Version
                         </span>
                     </li>
                     @if (package.Tags.Any())
                     {
                         <li>
-                            <span class="tags">
+                            <span>
                                 <i class="ms-Icon ms-Icon--Tag"></i>
-                                @string.Join(" ", package.Tags)
+                                @string.Join("  ", package.Tags)
                             </span>
                         </li>
                     }
                 </ul>
-                <div>
+                @* 描述 *@
+                <div class="package-desc">
                     @package.Description
                 </div>
             </div>
         </div>
     }
 
-    var showPreviousLink = Model.PageIndex > 1;
-    var showNextLink = Model.Packages.Count >= IndexModel.ResultsPerPage;
-
-    if (showPreviousLink || showNextLink)
+    @* 分页 *@
+    @if (showPreviousLink || showNextLink)
     {
-        <nav aria-label="Search page navigation">
+        <nav aria-label="搜索分页导航">
             <ul class="pager">
                 @if (showPreviousLink)
                 {
-                    <li><a href="@SearchLink(page:Model.PageIndex - 1)">Previous</a></li>
+                    <li>
+                        <a href="@SearchLink(page: Model.PageIndex - 1)">
+                            <span class="ms-Icon ms-Icon--ChevronLeft" aria-hidden="true"></span>
+                            上一页
+                        </a>
+                    </li>
                 }
-
                 @if (showNextLink)
                 {
-                    <li><a href="@SearchLink(page: Model.PageIndex + 1)">Next</a></li>
+                    <li>
+                        <a href="@SearchLink(page: Model.PageIndex + 1)">
+                            下一页
+                            <span class="ms-Icon ms-Icon--ChevronRight" aria-hidden="true"></span>
+                        </a>
+                    </li>
                 }
             </ul>
         </nav>
@@ -174,26 +189,26 @@ else
 
 @functions {
 
+    // 包类型选项（中文）
     private IReadOnlyDictionary<string, string> PackageTypes { get; } = new Dictionary<string, string>()
     {
-        { "any", "Any" },
-        { "dependency", "Dependency" },
-        { "dotnettool", ".NET tool" },
-        { "dotnettemplate", ".NET template" },
+        { "any",             "全部类型" },
+        { "dependency",      "依赖包" },
+        { "dotnettool",      ".NET 工具" },
+        { "dotnettemplate",  ".NET 模板" },
     };
 
+    // 目标框架选项（保留英文版本号）
     private IReadOnlyDictionary<string, string> TargetFrameworks { get; } = new Dictionary<string, string>()
     {
-        { "any", "Any" },
+        { "any", "全部框架" },
 
         { "divider1", "-" },
         { "header1", ".NET" },
-
         { "net5.0", ".NET 5.0" },
 
         { "divider2", "-" },
         { "header2", ".NET Standard" },
-
         { "netstandard2.1", ".NET Standard 2.1" },
         { "netstandard2.0", ".NET Standard 2.0" },
         { "netstandard1.6", ".NET Standard 1.6" },
@@ -206,7 +221,6 @@ else
 
         { "divider3", "-" },
         { "header3", ".NET Core" },
-
         { "netcoreapp3.1", ".NET Core 3.1" },
         { "netcoreapp3.0", ".NET Core 3.0" },
         { "netcoreapp2.2", ".NET Core 2.2" },
@@ -216,41 +230,41 @@ else
 
         { "divider4", "-" },
         { "header4", ".NET Framework" },
-
-        { "net48", ".NET Framework 4.8" },
+        { "net48",  ".NET Framework 4.8" },
         { "net472", ".NET Framework 4.7.2" },
         { "net471", ".NET Framework 4.7.1" },
         { "net463", ".NET Framework 4.6.3" },
         { "net462", ".NET Framework 4.6.2" },
         { "net461", ".NET Framework 4.6.1" },
-        { "net46", ".NET Framework 4.6" },
+        { "net46",  ".NET Framework 4.6" },
         { "net452", ".NET Framework 4.5.2" },
         { "net451", ".NET Framework 4.5.1" },
-        { "net45", ".NET Framework 4.5" },
+        { "net45",  ".NET Framework 4.5" },
         { "net403", ".NET Framework 4.0.3" },
-        { "net4", ".NET Framework 4" },
-        { "net35", ".NET Framework 3.5" },
-        { "net2", ".NET Framework 2" },
-        { "net11", ".NET Framework 1.1" },
+        { "net4",   ".NET Framework 4" },
+        { "net35",  ".NET Framework 3.5" },
+        { "net2",   ".NET Framework 2" },
+        { "net11",  ".NET Framework 1.1" },
     };
 
+    // 构建搜索链接（带全部过滤参数）
     private string SearchLink(
         string packageType = null,
         string framework = null,
         bool? prerelease = null,
         int? page = null)
     {
-        // Use model's value if the argument was skipped.
+        // 未指定参数时使用当前模型值
         packageType = packageType ?? Model.PackageType;
-        framework = framework ?? Model.Framework;
-        prerelease = prerelease ?? Model.Prerelease;
-        page = page ?? Model.PageIndex;
+        framework   = framework   ?? Model.Framework;
+        prerelease  = prerelease  ?? Model.Prerelease;
+        page        = page        ?? Model.PageIndex;
 
-        // Remove query parameters that have default value
+        // 去掉默认值的参数
         if (packageType == "any") packageType = null;
-        if (framework == "any") framework = null;
-        if (prerelease == true) prerelease = null;
-        if (page == 1) page = null;
+        if (framework   == "any") framework   = null;
+        if (prerelease  == true)  prerelease  = null;
+        if (page        == 1)     page        = null;
 
         return Url.Page("Index", new
         {

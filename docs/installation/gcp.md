@@ -4,7 +4,7 @@
     This page is a work in progress!
 
 We're open source and accept contributions!
-[Fork us on GitHub](https://github.com/loic-sharma/BaGet).
+[Fork us on GitHub](https://github.com/WinM-Tech/BaGet).
 
 Before you begin, you should decide which [AppEngine region](https://cloud.google.com/appengine/docs/locations)
 you will use. For best performance, Cloud Storage and Cloud SQL should be located
@@ -46,7 +46,7 @@ Configure BaGet to use Google Cloud Storage by updating the `appsettings.json` f
 * Follow [Configuring SSL/TLS](https://cloud.google.com/sql/docs/mysql/configure-ssl-instance#new-client) to create a client certificate. Download the three files it creates.
 * Convert the PEM to a PFX by running `openssl pkcs12 -inkey client-key.pem -in client-cert.pem -export -out client.pfx`
   * One way to obtain OpenSSL on Windows is to install [Git Bash](https://gitforwindows.org/).
-* Configure BaGet to use Google Cloud SQL by updating the [`appsettings.json`](https://github.com/loic-sharma/BaGet/blob/master/src/BaGet/appsettings.json) file:
+* Configure BaGet to use Google Cloud SQL by updating the [`appsettings.json`](https://github.com/WinM-Tech/BaGet/blob/master/src/BaGet/appsettings.json) file:
 
 ```json
 {

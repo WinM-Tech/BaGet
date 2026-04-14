@@ -1,26 +1,26 @@
-# Import packages from a local feed
+# 从本地 Feed 导入包
 
-[Local feeds](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds) let you use a folder as a NuGet package source.
+[本地 Feed](https://docs.microsoft.com/zh-cn/nuget/hosting-packages/local-feeds) 允许您使用本地文件夹作为 NuGet 包来源。
 
 !!! info
-    Please refer to the [BaGet vs local feeds](../vs/local-feeds.md) page for reasons to upgrade to BaGet.
+    请参阅 [BaGet vs 本地 Feed](../vs/local-feeds.md) 页面了解升级到 BaGet 的理由。
 
-## Steps
+## 迁移步骤
 
-Make sure that you've installed [nuget.exe](https://www.nuget.org/downloads). In PowerShell, run:
+确保已安装 [nuget.exe](https://www.nuget.org/downloads)。在 PowerShell 中设置变量：
 
 ```ps1
 $source = "C:\path\to\local\feed"
 $destination = "http://localhost:5000/v3/index.json"
 ```
 
-If you've [configured BaGet to require an API Key](https://loic-sharma.github.io/BaGet/configuration/#requiring-an-api-key), set it using [the `setapikey` command](https://docs.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-setapikey):
+如果已[配置 BaGet 需要 API 密钒](https://loic-sharma.github.io/BaGet/configuration/#requiring-an-api-key)，请设置 API 密钒：
 
 ```ps1
 & nuget.exe setapikey "MY-API-KEY" -Source $destination
 ```
 
-Now run the following PowerShell script:
+然后执行以下 PowerShell 脚本：
 
 ```ps1
 $packages = nuget list -AllVersions -Source $source

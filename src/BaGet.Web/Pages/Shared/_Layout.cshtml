@@ -1,58 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="BaGet">
-    <meta name="author" content="Loic Sharma">
+    <meta name="description" content="WinM Nuget - 轻量级 NuGet 包服务器">
+    <meta name="author" content="WinM Nuget">
 
     <link rel="shortcut icon" href="~/_content/BaGet.Web/favicon.ico">
-
     <link rel="stylesheet" href="~/_content/BaGet.Web/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/_content/BaGet.Web/lib/office-ui-fabric-core/dist/css/fabric.min.css" />
     <link rel="stylesheet" href="~/_content/BaGet.Web/css/site.css" />
 
-    <title>@ViewData["Title"] - BaGet</title>
+    <title>@ViewData["Title"] - WinM Nuget</title>
 </head>
 <body>
     <header>
+        @* 顶部导航栏 *@
+        <nav class="site-nav" role="navigation">
+            <div class="nav-inner">
+                @* Logo *@
+                <a class="nav-brand" asp-page="/Index">
+                    <span class="nav-brand-icon"><span class="ms-Icon ms-Icon--Package" aria-hidden="true"></span></span>
+                    <span class="nav-brand-text">WinM Nuget</span>
+                </a>
 
-        <nav class="navbar navbar-inverse" role="navigation">
-            <div class="container">
-                <div class="row">
-                    <div id="navbar" class="col-sm-12">
-                        <ul class="nav navbar-nav" role="tablist">
-                            <li role="presentation"><a asp-area="" asp-page="/Index" role="tab" nav-link><span>Packages</span></a></li>
-                            <li role="presentation"><a asp-area="" asp-page="/Upload" role="tab" nav-link><span>Upload</span></a></li>
-                            <li role="presentation">
-                                <a role="tab" href="https://loic-sharma.github.io/BaGet/" target="_blank" rel="noopener noreferrer">
-                                    <span>Documentation</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="container search-container">
-                <div class="row">
-                    <form class="col-sm-12" action="@Url.Page("/Index")" method="get">
-                        <div class="input-group">
+                @* 导航链接 *@
+                <ul class="nav-links" role="tablist">
+                    <li>
+                        <a asp-area="" asp-page="/Index" role="tab" nav-link>
+                            <span class="ms-Icon ms-Icon--List" aria-hidden="true"></span>
+                            <span>包列表</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="" asp-page="/Upload" role="tab" nav-link>
+                            <span class="ms-Icon ms-Icon--Upload" aria-hidden="true"></span>
+                            <span>发布包</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/WinM-Tech/BaGet" target="_blank" rel="noopener noreferrer">
+                            <span class="ms-Icon ms-Icon--GitGraph" aria-hidden="true"></span>
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+                </ul>
+
+                @* 搜索框 *@
+                <div class="nav-search">
+                    <form action="@Url.Page("/Index")" method="get">
+                        <div class="nav-search-box">
+                            <span class="ms-Icon ms-Icon--Search nav-search-icon" aria-hidden="true"></span>
                             <input type="text"
                                    name="q"
                                    value="@ViewData["SearchQuery"]"
-                                   class="form-control"
-                                   autoComplete="off"
-                                   placeholder="Search packages..." />
-
-                            <span class="input-group-btn">
-                                <button type="submit"
-                                        class="btn btn-default"
-                                        title="Search for packages">
-                                    <span class="ms-Icon ms-Icon--Search" aria-hidden="true"></span>
-                                </button>
-                            </span>
+                                   class="nav-search-input"
+                                   autocomplete="off"
+                                   placeholder="搜索 NuGet 包..." />
+                            <button type="submit" class="nav-search-btn" title="搜索">搜索</button>
                         </div>
-
                         @await RenderSectionAsync("SearchForm", required: false)
                     </form>
                 </div>
@@ -60,12 +66,20 @@
         </nav>
     </header>
 
-    <section role="main" class="container main-container">
+    <main role="main" class="container main-container">
         @RenderBody()
-    </section>
+    </main>
+
+    @* 底部版权 *@
+    <footer class="site-footer">
+        <div class="container">
+            <span>WinM Nuget &copy; @DateTime.Now.Year &nbsp;&middot;&nbsp; 轻量级 NuGet 包服务器 &nbsp;&middot;&nbsp;
+                <a href="https://github.com/WinM-Tech/BaGet" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </span>
+        </div>
+    </footer>
 
     <script src="~/_content/BaGet.Web/lib/alpinejs/dist/alpine.js"></script>
-
     <script src="~/_content/BaGet.Web/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/_content/BaGet.Web/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/_content/BaGet.Web/js/site.js" asp-append-version="true"></script>

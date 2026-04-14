@@ -1,5 +1,7 @@
 # WinM Nuget 📦
 
+> 本项目基于 https://github.com/loic-sharma/BaGet 修改而来
+
 [![构建状态](https://img.shields.io/github/actions/workflow/status/WinM-Tech/BaGet/.github/workflows/main.yml)](https://github.com/WinM-Tech/BaGet/actions)
 [![许可证](https://img.shields.io/github/license/WinM-Tech/BaGet)](LICENSE)
 

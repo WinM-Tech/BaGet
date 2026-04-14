@@ -2,24 +2,32 @@
 @inject IUrlGenerator _url
 
 @{
-    ViewData["Title"] = "Upload package";
+    ViewData["Title"] = "发布包";
 
     var baseUrl = Url.PageLink("/Index");
     var publishUrl = _url.GetPackagePublishResourceUrl();
     var serviceIndexUrl = _url.GetServiceIndexUrl();
 }
 
-<div class="col-sm-12">
-    <h1>Upload</h1>
-    <hr class="breadcrumb-divider" />
+<div class="col-sm-12 upload-page">
+    <h1>
+        <span class="ms-Icon ms-Icon--Upload" aria-hidden="true" style="font-size:1.5rem;color:var(--primary);"></span>
+        发布 NuGet 包
+    </h1>
+    <hr style="border:none;border-top:1px solid var(--border);margin:0 0 24px;" />
 
-    <div>You can push packages using the service index <code>@serviceIndexUrl</code>.</div>
+    @* 服务索引地址提示 *@
+    <div class="upload-intro">
+        <span class="ms-Icon ms-Icon--Info" aria-hidden="true"></span>
+        服务索引地址：<code style="background:rgba(255,255,255,0.5);color:var(--primary-dark);">@serviceIndexUrl</code>
+    </div>
 
+    @* 推送方式选项卡 *@
     <div class="tabbed-info" x-data="{ tabs: tabs, active: tabs[0] }">
-        <ul class="nav">
+        <ul>
             <template x-for="tab in tabs" :key="tab.name">
                 <li x-bind:class="{ 'active': active.name === tab.name }">
-                    <a href="#" x-text="tab.name" @@click="active = tab"></a>
+                    <a href="#" x-text="tab.name" @@click.prevent="active = tab"></a>
                 </li>
             </template>
         </ul>
@@ -32,24 +40,26 @@
             </div>
 
             <div class="copy-button">
-                <button class="btn btn-default btn-warning"
+                <button class="btn btn-warning"
                         type="button"
-                        data-tottle="popover"
+                        data-toggle="popover"
                         data-placement="bottom"
-                        data-content="Copied"
-                        @@click="window.baget.copyTextToClipboard(active.content.join('\n'), $el)">
+                        data-content="已复制"
+                        @@click="window.baget.copyTextToClipboard(active.content.join('\n'), $el)"
+                        title="复制命令">
                     <i class="ms-Icon ms-Icon--Copy"></i>
                 </button>
             </div>
         </div>
 
         <div class="icon-text alert alert-warning">
-            For more information, please refer to
+            <span class="ms-Icon ms-Icon--Link" style="margin-right:6px;"></span>
+            更多信息请参阅
             <a target="_blank"
                rel="noopener noreferrer"
                x-bind:href="active.documentation"
-               x-text="`${active.name}'s documentation`">
-            </a>.
+               x-text="`${active.name} 官方文档`">
+            </a>。
         </div>
     </div>
 </div>
@@ -59,22 +69,18 @@
         {
             name: ".NET CLI",
             content: ["dotnet nuget push -s @serviceIndexUrl package.nupkg"],
-            documentation: "https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-nuget-push",
+            documentation: "https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-nuget-push",
         },
-
         {
             name: "NuGet",
             content: ["nuget push -Source @serviceIndexUrl package.nupkg"],
-            documentation: "https://docs.microsoft.com/en-us/nuget/tools/cli-ref-push",
+            documentation: "https://docs.microsoft.com/zh-cn/nuget/tools/cli-ref-push",
         },
-
         {
             name: "Paket",
             content: ["paket push --url @baseUrl package.nupkg"],
             documentation: "https://fsprojects.github.io/Paket/paket-push.html",
         },
-
-        // TODO: This is broken...
         {
             name: "PowerShellGet",
             content: [
@@ -82,7 +88,7 @@
                   + "-PublishLocation \"@publishUrl\" -InstallationPolicy \"Trusted\"",
                 "Publish-Module -Name PS-Module -Repository BaGet"
             ],
-            documentation: "https://docs.microsoft.com/en-us/powershell/module/powershellget/publish-module",
+            documentation: "https://docs.microsoft.com/zh-cn/powershell/module/powershellget/publish-module",
         },
     ];
 </script>

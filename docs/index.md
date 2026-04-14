@@ -1,22 +1,22 @@
 # BaGet
 
-BaGet (pronounced "baguette") is a lightweight NuGet and symbol server. It is [open source](https://github.com/loic-sharma/BaGet), cross-platform, and cloud ready!
+BaGet（发音为 "baguette"，即法棍面包）是一个轻量级的 NuGet 和符号包服务器。它是[开源的](https://github.com/WinM-Tech/BaGet)，跨平台，并且支持云部署！
 
 <p align="center">
   <img width="100%" src="https://user-images.githubusercontent.com/737941/50140219-d8409700-0258-11e9-94c9-dad24d2b48bb.png">
 </p>
 
-## Run BaGet
+## 运行 BaGet
 
-You can run BaGet on your preferred platform:
+您可以在以下平台上运行 BaGet：
 
-* [On your computer](installation/local.md)
-* [Docker](installation/docker.md)
-* [Azure](installation/azure.md)
-* [AWS](installation/aws.md)
+* [本地计算机](installation/local.md)
+* [Docker 容器](installation/docker.md)
+* [Microsoft Azure](installation/azure.md)
+* [Amazon AWS](installation/aws.md)
 * [Google Cloud](installation/gcp.md)
-* [Alibaba Cloud (Aliyun)](installation/aliyun.md)
+* [阿里云](installation/aliyun.md)
 
 ## BaGet SDK
 
-You can also use the [`BaGet.Protocol`](https://www.nuget.org/packages/BaGet.Protocol) package to interact with a NuGet server. For more information, please refer to the [BaGet SDK](advanced/sdk.md) guide.
+您也可以使用 [`BaGet.Protocol`](https://www.nuget.org/packages/BaGet.Protocol) 包与 NuGet 服务器进行交互。更多信息请参阅 [BaGet SDK](advanced/sdk.md) 指南。

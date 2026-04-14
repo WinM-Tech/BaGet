@@ -1,23 +1,23 @@
-# Run BaGet on Azure
+# 在 Azure 上运行 BaGet
 
 !!! warning
-    This page is a work in progress!
+    本页内容正在建设中！
 
-Use Azure to scale BaGet. You can store metadata on [Azure SQL Database](https://azure.microsoft.com/en-us/services/sql-database/), upload packages to [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/), and provide powerful search using [Azure Search](https://azure.microsoft.com/en-us/services/search/).
+利用 Azure 扩展 BaGet。可将元数据存储到 [Azure SQL 数据库](https://azure.microsoft.com/zh-cn/services/sql-database/)，将包文件上传到 [Azure Blob 存储](https://azure.microsoft.com/zh-cn/services/storage/blobs/)，并使用 [Azure 搜索](https://azure.microsoft.com/zh-cn/services/search/) 提供强大的搜索功能。
 
-## TODO
+## 待完善
 
-* App Service
-* Table Storage
-* High availability setup
+* 应用服务（App Service）
+* 表存储（Table Storage）
+* 高可用配置
 
-## Configure BaGet
+## 配置 BaGet
 
-You can modify BaGet's configurations by editing the `appsettings.json` file. For the full list of configurations, please refer to [BaGet's configuration](../configuration.md) guide.
+通过编辑 `appsettings.json` 文件修改 BaGet 配置。完整配置项请参阅 [BaGet 配置指南](../configuration.md)。
 
-### Azure SQL database
+### Azure SQL 数据库
 
-Update the `appsettings.json` file:
+修改 `appsettings.json` 文件：
 
 ```json
 {
@@ -32,9 +32,9 @@ Update the `appsettings.json` file:
 }
 ```
 
-### Azure Blob Storage
+### Azure Blob 存储
 
-Update the `appsettings.json` file:
+修改 `appsettings.json` 文件：
 
 ```json
 {
@@ -52,7 +52,7 @@ Update the `appsettings.json` file:
 }
 ```
 
-Alternatively, you can use a full Azure Storage connection string:
+也可以使用完整的 Azure Storage 连接字符串：
 
 ```json
 {
@@ -71,7 +71,7 @@ Alternatively, you can use a full Azure Storage connection string:
 
 ### Azure Search
 
-Update the `appsettings.json` file:
+修改 `appsettings.json` 文件：
 
 ```json
 {
