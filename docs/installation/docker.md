@@ -4,14 +4,11 @@
 
 ## 前置条件
 
-- 已安装 [Docker](https://docs.docker.com/get-docker/)（20.10+）
-- Docker Compose（V2 插件 或 V1 独立命令均可）
+- 已安装 [Docker](https://docs.docker.com/get-docker/) **24.0+**（内置 Compose V2 插件）
+- 验证方式：`docker compose version` 输出应为 `v2.x.x` 或更高
 
-> **Compose V1 vs V2**：不同 Docker 版本命令略有差异。
-> - **V2（推荐）**：命令为 `docker compose`（中间有空格），集成在 Docker 20.10+ 中
-> - **V1（旧版）**：命令为 `docker-compose`（中间有连字符），需单独安装
->
-> 如运行 `docker compose up -d` 报 `unknown shorthand flag: 'd'` 错误，说明是 V1 环境，请将文档中所有 `docker compose` 替换为 `docker-compose`，或参考[升级 Docker](#升级-docker-获得-compose-v2) 章节。
+> Docker 24.0+ 已将 Compose V2 作为内置插件随 Docker 一同安装，无需单独安装。  
+> 如系统 Docker 版本过旧，可通过官方脚本升级：`curl -fsSL https://get.docker.com | sh`
 
 ## 镜像说明
 
@@ -286,38 +283,10 @@ Database__Type=MySql
 Database__ConnectionString=Server=db;Database=baget;User=root;Password=pass;
 ```
 
-**Q：运行 `docker compose up -d` 报 `unknown shorthand flag: 'd'`？**
-当前 Docker 版本不含 Compose V2 插件，有两种解决方式：
-
-方式一：使用旧版 `docker-compose` 命令（无需升级）：
+**Q：运行 `docker compose` 提示命令不存在或版本过低？**
+升级 Docker 到 24.0+ 即可，Compose V2 已作为内置插件随附：
 ```bash
-docker-compose up -d
-```
-
-方式二：升级 Docker 以获得 Compose V2（推荐）：
-```bash
-# CentOS / RHEL / Alibaba Cloud Linux
 curl -fsSL https://get.docker.com | sh
 systemctl enable --now docker
-
-# 验证
-docker compose version
+docker compose version  # 验证
 ```
-
----
-
-## 升级 Docker 获得 Compose V2
-
-如服务器 Docker 版本较旧（低于 20.10），建议通过官方脚本升级：
-
-```bash
-# 一键安装/升级 Docker（包含 Compose V2 插件）
-curl -fsSL https://get.docker.com | sh
-systemctl enable --now docker
-
-# 验证版本
-docker --version
-docker compose version
-```
-
-升级后原有容器和数据卷不受影响，重新执行 `docker compose up -d` 即可。

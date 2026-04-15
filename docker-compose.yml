@@ -1,5 +1,3 @@
-version: "3.8"
-
 # WinM Nuget - Docker Compose 部署配置
 # 使用方式：docker compose up -d
 # 访问地址：http://localhost:5000
