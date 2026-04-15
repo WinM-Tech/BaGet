@@ -7,6 +7,21 @@
 - 已安装 [Docker](https://docs.docker.com/get-docker/)（20.10+）
 - 已安装 [Docker Compose](https://docs.docker.com/compose/install/)（2.0+，`docker compose` 命令）
 
+## 镜像说明
+
+镜像托管在 GitHub Container Registry（GHCR），地址为：
+
+```
+ghcr.io/winm-tech/baget
+```
+
+| 标签 | 说明 | 触发方式 |
+|------|------|----------|
+| `latest` | 最新开发版，每次推送到 `main` 分支自动构建 | 自动（CI/CD） |
+| `1.0.0`、`1.1.0` 等 | 正式发布版本，稳定可用 | 手动触发 Release workflow |
+
+> **生产环境建议**：使用具体版本标签（如 `ghcr.io/winm-tech/baget:1.0.0`）而非 `latest`，避免自动更新引入非预期变更。可在 [GitHub Releases](https://github.com/WinM-Tech/BaGet/releases) 查看所有可用版本。
+
 ---
 
 ## 方式一：Docker Compose 部署（推荐）
@@ -55,12 +70,28 @@ docker compose logs -f winm-nuget
 # 停止服务
 docker compose down
 
-# 更新镜像并重启
+# 更新到最新镜像并重启
 docker compose pull && docker compose up -d
 
 # 查看数据卷位置
 docker volume inspect baget_baget-data
 ```
+
+### 升级到指定版本
+
+编辑 `docker-compose.yml`，将 `image` 改为目标版本标签：
+
+```yaml
+image: ghcr.io/winm-tech/baget:1.1.0
+```
+
+然后重新拉取并启动：
+
+```bash
+docker compose pull && docker compose up -d
+```
+
+> 数据卷 `baget-data` 不会因升级而丢失，升级前建议备份数据卷目录。
 
 ---
 
